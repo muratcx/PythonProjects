@@ -1,13 +1,19 @@
 import keyboard
 import os
 import time
-from pathlib import Path  # Import the pathlib module
+from pathlib import Path
 
 # Define a list to store recorded keystrokes
 recorded_sequence = []
 
 # Define the path to the user's Downloads folder
 downloads_folder = str(Path.home() / "Downloads")
+
+# Define the file path for the recorded sequence
+file_path = os.path.join(downloads_folder, "recorded_sequence.txt")
+
+# Create the directory structure if it doesn't exist
+os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
 # Function to process key events
 def on_key_event(e):
@@ -62,8 +68,7 @@ try:
         # Check for inactivity and save data if the threshold is reached
         current_time = time.time()
         if (current_time - last_activity_time) >= idle_time_threshold:
-            file_name = os.path.join(downloads_folder, "recorded_sequence.txt")
-            save_and_clear_sequence(file_name)
+            save_and_clear_sequence(file_path)
             last_activity_time = current_time  # Update last activity time
 
         time.sleep(1)  # Sleep for 1 second before checking again
@@ -72,8 +77,7 @@ except KeyboardInterrupt:
     pass
 finally:
     # Ensure the recorded data is saved before exiting
-    file_name = os.path.join(downloads_folder, "recorded_sequence.txt")
-    save_and_clear_sequence(file_name)
+    save_and_clear_sequence(file_path)
 
     # Unhook all keyboard events
     keyboard.unhook_all()
