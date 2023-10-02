@@ -35,7 +35,6 @@ def save_recorded_sequence_to_file(file_path):
     try:
         with open(file_path, 'a') as file:  # Use 'a' for append mode
             file.write("".join(recorded_sequence))
-            file.write("\n")  # Add a newline to separate recordings
         print(f"Recorded sequence saved to '{file_path}'")
     except Exception as e:
         print(f"Error: {e}")
