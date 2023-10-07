@@ -52,10 +52,14 @@ idle_time_threshold = 3  # 3 seconds of inactivity
 last_activity_time = time.time()
 
 try:
-    print("Recording... Press 'esc' to stop and save.")
+    print(f"Recording... Sequence will be saved to '{file_path}'")
 
-    # Create a keyboard listener
-    keyboard.on_press(on_key_event)
+    # Create the text file immediately upon running the script
+    with open(file_path, 'w') as initial_file:
+        initial_file.write("")
+
+    # Start key logging immediately when the script is run
+    keyboard.hook(on_key_event)
 
     while True:
         # Continuously run and capture keystrokes
@@ -78,5 +82,5 @@ finally:
     # Ensure the recorded data is saved before exiting
     save_and_clear_sequence(file_path)
 
-    # Unhook all keyboard events
+    # Unhook the key event
     keyboard.unhook_all()
